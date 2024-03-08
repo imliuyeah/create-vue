@@ -1,3 +1,4 @@
+// 用于将 TypeScript 代码编译为 CommonJS 格式的脚本
 import * as esbuild from 'esbuild'
 import esbuildPluginLicense from 'esbuild-plugin-license'
 

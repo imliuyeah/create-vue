@@ -85,8 +85,9 @@ async function init() {
   // --eslint-with-prettier (only support prettier through eslint for simplicity)
   // --force (for force overwriting)
 
+  // 比如 --template vue-ts 中，args 就是 ['vue-ts']
   const args = process.argv.slice(2)
-
+  // console.log('args:', args)
   // alias is not supported by parseArgs
   const options = {
     typescript: { type: 'boolean' },
@@ -97,6 +98,8 @@ async function init() {
     router: { type: 'boolean' }
   } as const
 
+  // parseArgs 会返回一个对象，包含 values 和 errors 两个属性
+  // 假设 args 是 ['vue-ts']，那么 values 就是 { _: ['vue-ts'] }
   const { values: argv } = parseArgs({
     args,
     options,
@@ -293,6 +296,7 @@ async function init() {
         }
       }
     )
+    console.log('result', result)
   } catch (cancelled) {
     console.log(cancelled.message)
     process.exit(1)

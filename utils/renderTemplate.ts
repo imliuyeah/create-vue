@@ -14,6 +14,7 @@ import sortDependencies from './sortDependencies'
  * @param {string} src source filename to copy
  * @param {string} dest destination filename of the copy operation
  */
+// 作用：渲染模板文件夹/文件到文件系统
 function renderTemplate(src, dest, callbacks) {
   const stats = fs.statSync(src)
 

@@ -1,3 +1,4 @@
+// 作用：对 package.json 中的依赖进行排序
 export default function sortDependencies(packageJson) {
   const sorted = {}
 

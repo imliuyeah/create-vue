@@ -1,4 +1,6 @@
 #!/usr/bin/env zx
+// 用于发布前的一些准备工作，比如构建、生成快照、更新 playground 等
+// playground 是一个用于演示的项目，会在发布时更新它的依赖并提交一个新的快照
 import 'zx/globals'
 
 await $`pnpm build`
