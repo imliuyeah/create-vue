@@ -54,6 +54,9 @@
   "needsPrettier": {
     "message": "是否引入 Prettier 用於程式碼格式化？"
   },
+  "needsUI": {
+    "message": "是否引入 element-plus 作为项目 UI 库？"
+  },
   "errors": {
     "operationCancelled": "操作取消"
   },

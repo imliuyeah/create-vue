@@ -201,7 +201,7 @@ async function init() {
           name: 'needsTypeScript',
           type: () => (isFeatureFlagsUsed ? null : 'toggle'),
           message: language.needsTypeScript.message,
-          initial: false,
+          initial: true,
           active: language.defaultToggleOptions.active,
           inactive: language.defaultToggleOptions.inactive
         },
@@ -217,7 +217,7 @@ async function init() {
           name: 'needsRouter',
           type: () => (isFeatureFlagsUsed ? null : 'toggle'),
           message: language.needsRouter.message,
-          initial: false,
+          initial: true,
           active: language.defaultToggleOptions.active,
           inactive: language.defaultToggleOptions.inactive
         },
@@ -286,6 +286,14 @@ async function init() {
           },
           message: language.needsPrettier.message,
           initial: false,
+          active: language.defaultToggleOptions.active,
+          inactive: language.defaultToggleOptions.inactive
+        },
+        {
+          name: 'needsUI',
+          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+          message: language.needsUI.message,
+          initial: true,
           active: language.defaultToggleOptions.active,
           inactive: language.defaultToggleOptions.inactive
         }
