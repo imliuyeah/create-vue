@@ -85,10 +85,9 @@ async function init() {
   // --eslint-with-prettier (only support prettier through eslint for simplicity)
   // --force (for force overwriting)
 
-  // 比如 --template vue-ts 中，args 就是 ['vue-ts']
   const args = process.argv.slice(2)
-  // console.log('args:', args)
   // alias is not supported by parseArgs
+  // 这一步是为了支持别名，比如 --typescript 和 --ts 都是一样的
   const options = {
     typescript: { type: 'boolean' },
     ts: { type: 'boolean' },
@@ -107,6 +106,7 @@ async function init() {
   })
 
   // if any of the feature flags is set, we would skip the feature prompts
+  // 如果有任何一个特性标志使用命令行参数的方式被设置了，后续就会跳过特性的提示
   const isFeatureFlagsUsed =
     typeof (
       argv.default ??
@@ -119,7 +119,8 @@ async function init() {
       argv.cypress ??
       argv.nightwatch ??
       argv.playwright ??
-      argv.eslint
+      argv.eslint ??
+      (argv.elementPlus || argv['element-plus'])
     ) === 'boolean'
 
   let targetDir = args[0]
@@ -141,6 +142,7 @@ async function init() {
     needsE2eTesting?: false | 'cypress' | 'nightwatch' | 'playwright'
     needsEslint?: boolean
     needsPrettier?: boolean
+    needsUI?: boolean
   } = {}
 
   try {
@@ -304,7 +306,7 @@ async function init() {
         }
       }
     )
-    console.log('result', result)
+    // console.log('result', result)
   } catch (cancelled) {
     console.log(cancelled.message)
     process.exit(1)
@@ -322,7 +324,8 @@ async function init() {
     needsPinia = argv.pinia,
     needsVitest = argv.vitest || argv.tests,
     needsEslint = argv.eslint || argv['eslint-with-prettier'],
-    needsPrettier = argv['eslint-with-prettier']
+    needsPrettier = argv['eslint-with-prettier'],
+    needsUI = argv['element-plus'] || argv.elementPlus
   } = result
 
   const { needsE2eTesting } = result
@@ -350,6 +353,7 @@ async function init() {
   // when bundling for node and the format is cjs
   // const templateRoot = new URL('./template', import.meta.url).pathname
   const templateRoot = path.resolve(__dirname, 'template')
+  // 在调用 renderTemplate 时，如果文件以 .data.mjs 结尾，就会往 callbacks 数组中添加一个回调函数
   const callbacks = []
   const render = function render(templateName) {
     const templateDir = path.resolve(templateRoot, templateName)
@@ -359,6 +363,7 @@ async function init() {
   render('base')
 
   // Add configs.
+  // 渲染 config 文件夹下的所有文件
   if (needsJsx) {
     render('config/jsx')
   }
@@ -370,6 +375,10 @@ async function init() {
   }
   if (needsVitest) {
     render('config/vitest')
+  }
+  // 新增 element-plus 配置
+  if (needsUI) {
+    render('config/element-plus')
   }
   if (needsCypress) {
     render('config/cypress')
@@ -393,6 +402,7 @@ async function init() {
     render('tsconfig/base')
     // The content of the root `tsconfig.json` is a bit complicated,
     // So here we are programmatically generating it.
+    // 这一步是为了生成根目录下的 tsconfig.json 文件
     const rootTsConfig = {
       // It doesn't target any specific files because they are all configured in the referenced ones.
       files: [],
@@ -406,6 +416,7 @@ async function init() {
         }
       ]
     }
+    // 判断需不需要 Cypress，如果需要的话，就渲染 cypress 的 tsconfig，并且需要给根目录的 tsconfig 添加引用
     if (needsCypress) {
       render('tsconfig/cypress')
       // Cypress uses `ts-node` internally, which doesn't support solution-style tsconfig.
@@ -413,6 +424,10 @@ async function init() {
       // I use `NodeNext` here instead of `ES2015` because that's what the actual environment is.
       // (Cypress uses the ts-node/esm loader when `type: module` is specified in package.json.)
       // @ts-ignore
+      // Cypress 在内部使用 ts-node，而 ts-node 不支持解决方案式的 tsconfig
+      // 所以我们需要在根目录的 tsconfig 中设置一个虚拟的 `compilerOptions` 来让它工作
+      // 这里使用 `NodeNext` 而不是 `ES2015`，因为这才是实际的环境
+      // （Cypress 在 package.json 中指定了 `type: module` 时，使用 ts-node/esm 加载器）
       rootTsConfig.compilerOptions = {
         module: 'NodeNext'
       }
@@ -420,6 +435,7 @@ async function init() {
     if (needsCypressCT) {
       render('tsconfig/cypress-ct')
       // Cypress Component Testing needs a standalone tsconfig.
+      // rootTsConfig.references 表示 tsconfig 的引用关系
       rootTsConfig.references.push({
         path: './tsconfig.cypress-ct.json'
       })
@@ -444,11 +460,15 @@ async function init() {
     if (needsNightwatchCT) {
       render('tsconfig/nightwatch-ct')
     }
+    // 将 tsconfig.json 写入到根目录
+    // JSON.stringify 的三个参数分别是：要序列化的对象，用于控制结果的可读性的选项，用于控制结果的缩进、空白和换行的选项
+    // 这里的意思是：将 rootTsConfig 序列化为 JSON 字符串，缩进为 2 个空格
     fs.writeFileSync(
       path.resolve(root, 'tsconfig.json'),
       JSON.stringify(rootTsConfig, null, 2) + '\n',
       'utf-8'
     )
+    console.log('ts:', JSON.stringify(rootTsConfig, null, 2) + '\n')
   }
 
   // Render ESLint config
@@ -467,12 +487,15 @@ async function init() {
   }
   // Render code template.
   // prettier-ignore
+  // 渲染 code 文件夹下的文件
+  // 这里的 codeTemplate 是一个字符串，它的值是 'typescript-router' 或者 'default'
   const codeTemplate =
     (needsTypeScript ? 'typescript-' : '') +
     (needsRouter ? 'router' : 'default')
   render(`code/${codeTemplate}`)
 
   // Render entry file (main.js/ts).
+  // 渲染 entry 文件夹下的文件
   if (needsPinia && needsRouter) {
     render('entry/router-and-pinia')
   } else if (needsPinia) {
@@ -484,6 +507,8 @@ async function init() {
   }
 
   // An external data store for callbacks to share data
+  // 调用 callbacks 数组中的每一个回调函数
+  // 在回调函数中，会调用 getData 函数，然后将返回的数据存储到 dataStore 中
   const dataStore = {}
   // Process callbacks
   for (const cb of callbacks) {
@@ -491,6 +516,7 @@ async function init() {
   }
 
   // EJS template rendering
+  // 前序遍历文件夹，对每一个文件进行处理，如果文件以 .ejs 结尾，就渲染模板
   preOrderDirectoryTraverse(
     root,
     () => {},
@@ -513,7 +539,11 @@ async function init() {
   // So after all the templates are rendered, we need to clean up the redundant files.
   // (Currently it's only `cypress/plugin/index.ts`, but we might add more in the future.)
   // (Or, we might completely get rid of the plugins folder as Cypress 10 supports `cypress.config.ts`)
-
+  // 我们尽可能地在 TypeScript 和 JavaScript 之间共享尽可能多的文件
+  // 如果不可能的话，我们会在模板中将 `.ts` 版本和 `.js` 版本放在一起
+  // 所以在所有模板都渲染完之后，我们需要清理多余的文件
+  // （目前只有 `cypress/plugin/index.ts`，但是以后我们可能会添加更多的文件）
+  // （或者，我们可能会完全摆脱 plugins 文件夹，因为 Cypress 10 支持 `cypress.config.ts`）
   if (needsTypeScript) {
     // Convert the JavaScript template to the TypeScript
     // Check all the remaining `.js` files:
@@ -521,6 +551,12 @@ async function init() {
     //   - Otherwise, rename the `.js` file to `.ts`
     // Remove `jsconfig.json`, because we already have tsconfig.json
     // `jsconfig.json` is not reused, because we use solution-style `tsconfig`s, which are much more complicated.
+    // 将 JavaScript 模板转换为 TypeScript 模板
+    // 检查所有剩余的 `.js` 文件：
+    //   - 如果相应的 TypeScript 版本已经存在，删除 `.js` 版本
+    //   - 否则，将 `.js` 文件重命名为 `.ts`
+    // 删除 `jsconfig.json`，因为我们已经有了 tsconfig.json
+    // `jsconfig.json` 没有被重用，因为我们使用了解决方案式的 `tsconfig`，它们要复杂得多
     preOrderDirectoryTraverse(
       root,
       () => {},
@@ -533,6 +569,7 @@ async function init() {
             fs.renameSync(filepath, tsFilePath)
           }
         } else if (path.basename(filepath) === 'jsconfig.json') {
+          // fs.unlinkSync 的作用是删除指定的文件
           fs.unlinkSync(filepath)
         }
       }

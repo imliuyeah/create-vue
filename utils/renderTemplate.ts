@@ -66,6 +66,7 @@ function renderTemplate(src, dest, callbacks) {
   }
 
   // data file for EJS templates
+  // e.g. `example.data.mjs` will be used to render `example.mjs`
   if (filename.endsWith('.data.mjs')) {
     // use dest path as key for the data store
     dest = dest.replace(/\.data\.mjs$/, '')
