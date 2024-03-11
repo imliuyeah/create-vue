@@ -2,17 +2,17 @@ export default function getData({ oldData, result }) {
   const importer = [
     "import AutoImport from 'unplugin-auto-import/vite'",
     "import { VueRouterAutoImports } from 'unplugin-vue-router'",
-    result.needsUI ? "import { elementPlusResolver } from 'unplugin-auto-import/resolvers'" : ''
+    result.needsUI ? "import { ElementPlusResolver } from 'unplugin-auto-import/resolvers'" : ''
   ]
 
   const imports = [
     '"vue"',
     'VueRouterAutoImports',
     result.needsPinia ? '"pinia"' : ''
-  ]
+  ].filter(Boolean).map((importItem, index) => index === 0 ? importItem : `        ${importItem}`); // 添加缩进
 
   const resolvers = [
-    result.needsUI ? `elementPlusResolver()` : ''
+    result.needsUI ? `ElementPlusResolver()` : ''
   ]
 
   const autoImportPlugin = {

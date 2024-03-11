@@ -364,6 +364,8 @@ async function init() {
 
   // Add configs.
   // 渲染 config 文件夹下的所有文件
+  render('config/auto-importer')
+  render('config/auto-registry-component')
   if (needsJsx) {
     render('config/jsx')
   }
@@ -525,7 +527,7 @@ async function init() {
       if (filepath.endsWith('.ejs')) {
         const template = fs.readFileSync(filepath, 'utf-8')
         const dest = filepath.replace(/\.ejs$/, '')
-        dataStore[dest].result = result
+        if (dataStore[dest]) dataStore[dest].result = result
         // console.log('dataStore[dest]:', dataStore[dest])
         const content = ejs.render(template, dataStore[dest])
         fs.writeFileSync(dest, content)
