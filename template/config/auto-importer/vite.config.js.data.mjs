@@ -19,6 +19,7 @@ export default function getData({ oldData, result }) {
     name: "autoImport",
     importer: importer.join('\n'),
     initializer: `AutoImport({
+      dts: 'types/auto-imports.d.ts',
       imports: [
         ${imports.join(',\n')}
       ],

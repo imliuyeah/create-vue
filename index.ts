@@ -231,45 +231,45 @@ async function init() {
           active: language.defaultToggleOptions.active,
           inactive: language.defaultToggleOptions.inactive
         },
-        {
-          name: 'needsVitest',
-          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
-          message: language.needsVitest.message,
-          initial: false,
-          active: language.defaultToggleOptions.active,
-          inactive: language.defaultToggleOptions.inactive
-        },
-        {
-          name: 'needsE2eTesting',
-          type: () => (isFeatureFlagsUsed ? null : 'select'),
-          hint: language.needsE2eTesting.hint,
-          message: language.needsE2eTesting.message,
-          initial: 0,
-          choices: (prev, answers) => [
-            {
-              title: language.needsE2eTesting.selectOptions.negative.title,
-              value: false
-            },
-            {
-              title: language.needsE2eTesting.selectOptions.cypress.title,
-              description: answers.needsVitest
-                ? undefined
-                : language.needsE2eTesting.selectOptions.cypress.desc,
-              value: 'cypress'
-            },
-            {
-              title: language.needsE2eTesting.selectOptions.nightwatch.title,
-              description: answers.needsVitest
-                ? undefined
-                : language.needsE2eTesting.selectOptions.nightwatch.desc,
-              value: 'nightwatch'
-            },
-            {
-              title: language.needsE2eTesting.selectOptions.playwright.title,
-              value: 'playwright'
-            }
-          ]
-        },
+        // {
+        //   name: 'needsVitest',
+        //   type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+        //   message: language.needsVitest.message,
+        //   initial: false,
+        //   active: language.defaultToggleOptions.active,
+        //   inactive: language.defaultToggleOptions.inactive
+        // },
+        // {
+        //   name: 'needsE2eTesting',
+        //   type: () => (isFeatureFlagsUsed ? null : 'select'),
+        //   hint: language.needsE2eTesting.hint,
+        //   message: language.needsE2eTesting.message,
+        //   initial: 0,
+        //   choices: (prev, answers) => [
+        //     {
+        //       title: language.needsE2eTesting.selectOptions.negative.title,
+        //       value: false
+        //     },
+        //     {
+        //       title: language.needsE2eTesting.selectOptions.cypress.title,
+        //       description: answers.needsVitest
+        //         ? undefined
+        //         : language.needsE2eTesting.selectOptions.cypress.desc,
+        //       value: 'cypress'
+        //     },
+        //     {
+        //       title: language.needsE2eTesting.selectOptions.nightwatch.title,
+        //       description: answers.needsVitest
+        //         ? undefined
+        //         : language.needsE2eTesting.selectOptions.nightwatch.desc,
+        //       value: 'nightwatch'
+        //     },
+        //     {
+        //       title: language.needsE2eTesting.selectOptions.playwright.title,
+        //       value: 'playwright'
+        //     }
+        //   ]
+        // },
         {
           name: 'needsEslint',
           type: () => (isFeatureFlagsUsed ? null : 'toggle'),
@@ -418,6 +418,13 @@ async function init() {
           path: './tsconfig.app.json'
         }
       ]
+    } as any
+    rootTsConfig.compilerOptions = {
+      baseUrl: '.',
+      paths: {
+        '@/*': ['src/*'],
+        '@type/*': ['types/*']
+      }
     }
     // 判断需不需要 Cypress，如果需要的话，就渲染 cypress 的 tsconfig，并且需要给根目录的 tsconfig 添加引用
     if (needsCypress) {

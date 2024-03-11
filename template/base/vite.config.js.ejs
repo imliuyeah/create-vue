@@ -1,9 +1,10 @@
-import { fileURLToPath, URL } from 'node:url'
+import path from "path";
 
 import { defineConfig } from 'vite'
 <%_ for (const { importer } of plugins) { _%>
 <%- importer %>
 <%_ } _%>
+import progress from 'vite-plugin-progress';
 
 const pathResolve = (pathStr: string) => {
   return path.resolve(__dirname, pathStr);
@@ -14,8 +15,9 @@ const pathResolve = (pathStr: string) => {
 export default defineConfig({
   plugins: [
   <%_ for (const { initializer } of plugins) { _%>
-    <%- initializer _%><%_ if ( initializer && (initializer !== plugins[plugins.length - 1].initializer)) { %>,<% } %>
+    <%- initializer _%>,
   <%_ } _%>
+    progress()
   ],
   resolve: {
     extensions: [
@@ -36,7 +38,7 @@ export default defineConfig({
   // css
   css: {
     preprocessorOptions: {
-      scss: { l
+      scss: {
         additionalData: '@import "@/styles/index.scss";'
       },
       javascriptEnabled: true

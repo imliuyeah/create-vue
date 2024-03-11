@@ -19,6 +19,7 @@ import {
     name: "autoRegistryComponents",
     importer: importer.join('\n'),
     initializer: `Components({
+      dts: 'types/components.d.ts',
       dirs: ['src/components'],
       extensions: ['vue', 'md'],
       deep: true,
