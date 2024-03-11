@@ -417,13 +417,6 @@ async function init() {
           path: './tsconfig.app.json'
         }
       ]
-    } as any
-    rootTsConfig.compilerOptions = {
-      baseUrl: '.',
-      paths: {
-        '@/*': ['src/*'],
-        '@type/*': ['types/*']
-      }
     }
     // 判断需不需要 Cypress，如果需要的话，就渲染 cypress 的 tsconfig，并且需要给根目录的 tsconfig 添加引用
     if (needsCypress) {

@@ -1,9 +1,10 @@
-import path from "path";
+import * as path from 'path'
 
 import { defineConfig } from 'vite'
 <%_ for (const { importer } of plugins) { _%>
 <%- importer %>
 <%_ } _%>
+
 
 const pathResolve = (pathStr: string) => {
   return path.resolve(__dirname, pathStr);

@@ -1,8 +1,7 @@
 export default function getData({ oldData, result }) {
   const importer = [
     "import AutoImport from 'unplugin-auto-import/vite'",
-    "import { VueRouterAutoImports } from 'unplugin-vue-router'",
-    result.needsUI ? "import { ElementPlusResolver } from 'unplugin-auto-import/resolvers'" : ''
+    "import { VueRouterAutoImports } from 'unplugin-vue-router'"
   ]
 
   const imports = [

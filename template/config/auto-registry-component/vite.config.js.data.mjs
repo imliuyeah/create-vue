@@ -3,7 +3,7 @@ export default function getData({ oldData, result }) {
     "import Components from 'unplugin-vue-components/vite'",
     result.needsUI ? `
 import {
-  ElementPlusComponentsResolver,
+  ElementPlusResolver,
   VueUseComponentsResolver
 } from 'unplugin-vue-components/resolvers'
     ` : "import { VueUseComponentsResolver } from 'unplugin-vue-components/resolvers'"
@@ -11,7 +11,7 @@ import {
 
   const resolvers = [
     'VueUseComponentsResolver()',
-    result.needsUI ?  'ElementPlusComponentsResolver()' : null
+    result.needsUI ?  'ElementPlusResolver()' : null
   ].filter(Boolean).map((importItem, index) => index === 0 ? importItem : `        ${importItem}`); // 添加缩进
 
 
