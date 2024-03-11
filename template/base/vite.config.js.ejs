@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 <%_ for (const { importer } of plugins) { _%>
 <%- importer %>
 <%_ } _%>
-import progress from 'vite-plugin-progress';
 
 const pathResolve = (pathStr: string) => {
   return path.resolve(__dirname, pathStr);
@@ -17,7 +16,6 @@ export default defineConfig({
   <%_ for (const { initializer } of plugins) { _%>
     <%- initializer _%>,
   <%_ } _%>
-    progress()
   ],
   resolve: {
     extensions: [

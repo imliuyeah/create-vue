@@ -382,7 +382,6 @@ async function init() {
   if (needsUI) {
     render('config/element-plus')
   }
-  // render('config/auto-importer')
   if (needsCypress) {
     render('config/cypress')
   }
@@ -469,6 +468,12 @@ async function init() {
     }
     if (needsNightwatchCT) {
       render('tsconfig/nightwatch-ct')
+    }
+    if (needsUI) {
+      render('tsconfig/element-plus')
+      rootTsConfig.references.push({
+        path: './tsconfig.element-plus.json'
+      })
     }
     // 将 tsconfig.json 写入到根目录
     // JSON.stringify 的三个参数分别是：要序列化的对象，用于控制结果的可读性的选项，用于控制结果的缩进、空白和换行的选项

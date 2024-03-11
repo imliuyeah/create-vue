@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    // 表示编译选项
+    "types": ["element-plus/global"]
+  }
+}

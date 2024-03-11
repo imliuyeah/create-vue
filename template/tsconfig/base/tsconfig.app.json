@@ -1,14 +1,48 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
-  "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
-    "baseUrl": ".",
+    // 表示编译选项
+    "target": "esnext", // 表示编译后的代码的目标版本是 esnext，esnext 是 ECMAScript 的下一个版本，也就是 ECMAScript 2021
+    "module": "esnext", // 表示编译后的代码使用的模块系统是 esnext
+    "moduleResolution": "node", // 表示模块解析策略是 node，模块解析策略是指编译器用来查找导入的模块的算法
+    "useDefineForClassFields": true, // 表示编译器是否使用 ECMAScript 的类字段声明语法，比如 class A { a = 1; }
+    "strict": true, // 表示编译器是否启用所有严格类型检查选项
+    "noLib": false, // 表示编译器是否包含默认的 lib.d.ts 文件
+    "forceConsistentCasingInFileNames": true, // 表示编译器是否强制文件名的大小写一致，比如 A.ts 和 a.ts 是不允许的
+    "allowSyntheticDefaultImports": true, // 表示编译器是否允许从没有设置默认导出的模块中默认导入，比如 import React from 'react' 这种写法是允许的
+    "strictFunctionTypes": false, // 表示编译器是否启用严格的函数类型检查
+    "jsx": "preserve", // 表示编译器是否支持 JSX 语法，preserve 表示编译后的代码中保留 JSX 语法
+    "baseUrl": ".", // 表示编译器的基本目录，比如在 src 目录下的文件可以使用 @/ 开头的路径来引用其他文件
+    "allowJs": true, // 表示编译器是否允许编译 JavaScript 文件
+    "sourceMap": true, // 表示编译器是否生成 source map 文件
+    "esModuleInterop": true, // 表示编译器是否允许在导入模块时使用 import = require() 语法
+    "resolveJsonModule": true, // 表示编译器是否允许导入 JSON 文件
+    "noUnusedLocals": true, // 表示编译器是否检查未使用的局部变量
+    "noUnusedParameters": true, // 表示编译器是否检查未使用的函数参数
+    "experimentalDecorators": true, // 表示编译器是否支持装饰器语法
+    "lib": ["dom", "esnext"], // 表示编译器默认包含的库文件，比如 dom 表示包含 DOM 和 BOM 的类型声明文件，esnext 表示包含 ECMAScript 的类型声明文件
+    "noImplicitAny": false, // 表示编译器是否允许隐式的 any 类型
+    "skipLibCheck": true, // 表示编译器是否跳过对引入的库文件的类型检查
+    "removeComments": true, // 表示编译器是否移除注释
+    "types": ["vite/client"], // 表示编译器需要包含的类型声明文件
     "paths": {
-      "@/*": ["./src/*"]
+      // 表示编译器的路径映射，比如 @/src/* 表示 src 目录下的文件可以使用 @/ 开头的路径来引用
+      "@/*": ["src/*"], // 表示 @/* 开头的路径映射到 src/* 目录下
+      "@type/*": ["types/*"] // 表示 @type/* 开头的路径映射到 types/* 目录下
     }
-  }
+  },
+  "include": [
+    // 表示编译器需要编译的文件
+    "src",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts",
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"] // 表示编译器需要排除的文件
 }
