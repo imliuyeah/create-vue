@@ -215,14 +215,14 @@ async function init() {
           active: language.defaultToggleOptions.active,
           inactive: language.defaultToggleOptions.inactive
         },
-        {
-          name: 'needsRouter',
-          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
-          message: language.needsRouter.message,
-          initial: true,
-          active: language.defaultToggleOptions.active,
-          inactive: language.defaultToggleOptions.inactive
-        },
+        // {
+        //   name: 'needsRouter',
+        //   type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+        //   message: language.needsRouter.message,
+        //   initial: true,
+        //   active: language.defaultToggleOptions.active,
+        //   inactive: language.defaultToggleOptions.inactive
+        // },
         {
           name: 'needsPinia',
           type: () => (isFeatureFlagsUsed ? null : 'toggle'),
@@ -320,7 +320,7 @@ async function init() {
     shouldOverwrite = argv.force,
     needsJsx = argv.jsx,
     needsTypeScript = argv.typescript,
-    needsRouter = argv.router,
+    needsRouter = true, // 默认安装 vue-router 不允许用户选择
     needsPinia = argv.pinia,
     needsVitest = argv.vitest || argv.tests,
     needsEslint = argv.eslint || argv['eslint-with-prettier'],
@@ -380,6 +380,7 @@ async function init() {
   if (needsUI) {
     render('config/element-plus')
   }
+  // render('config/auto-importer')
   if (needsCypress) {
     render('config/cypress')
   }
@@ -468,7 +469,6 @@ async function init() {
       JSON.stringify(rootTsConfig, null, 2) + '\n',
       'utf-8'
     )
-    console.log('ts:', JSON.stringify(rootTsConfig, null, 2) + '\n')
   }
 
   // Render ESLint config
@@ -485,6 +485,7 @@ async function init() {
   if (needsPrettier) {
     render('config/prettier')
   }
+
   // Render code template.
   // prettier-ignore
   // 渲染 code 文件夹下的文件
@@ -512,7 +513,7 @@ async function init() {
   const dataStore = {}
   // Process callbacks
   for (const cb of callbacks) {
-    await cb(dataStore)
+    await cb(dataStore, result)
   }
 
   // EJS template rendering
@@ -524,8 +525,9 @@ async function init() {
       if (filepath.endsWith('.ejs')) {
         const template = fs.readFileSync(filepath, 'utf-8')
         const dest = filepath.replace(/\.ejs$/, '')
+        dataStore[dest].result = result
+        // console.log('dataStore[dest]:', dataStore[dest])
         const content = ejs.render(template, dataStore[dest])
-
         fs.writeFileSync(dest, content)
         fs.unlinkSync(filepath)
       }

@@ -72,12 +72,13 @@ function renderTemplate(src, dest, callbacks) {
     dest = dest.replace(/\.data\.mjs$/, '')
 
     // Add a callback to the array for late usage when template files are being processed
-    callbacks.push(async (dataStore) => {
+    callbacks.push(async (dataStore, result) => {
       const getData = (await import(pathToFileURL(src).toString())).default
 
       // Though current `getData` are all sync, we still retain the possibility of async
       dataStore[dest] = await getData({
-        oldData: dataStore[dest] || {}
+        oldData: dataStore[dest] || {},
+        result
       })
     })
 
