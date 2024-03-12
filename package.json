@@ -1,10 +1,10 @@
 {
-  "name": "create-vue",
+  "name": "create-vue-bwcj",
   "version": "3.9.2",
   "description": "An easy way to start a Vue project",
   "type": "module",
   "bin": {
-    "create-vue": "outfile.cjs"
+    "create-vue-bwcj": "outfile.cjs"
   },
   "files": [
     "locales",
@@ -26,15 +26,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/create-vue.git"
+    "url": "git+https://github.com/imliuyeah/create-vue-bwcj.git"
   },
   "keywords": [],
   "author": "Haoqun Jiang <haoqunjiang+npm@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/create-vue/issues"
+    "url": "https://github.com/imliuyeah/create-vue-bwcj/issues"
   },
-  "homepage": "https://github.com/vuejs/create-vue#readme",
+  "homepage": "https://github.com/imliuyeah/create-vue-bwcj#readme",
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/eslint": "^8.56.5",
