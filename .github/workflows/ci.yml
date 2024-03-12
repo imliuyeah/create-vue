@@ -153,12 +153,12 @@ jobs:
       - if: ${{ (contains(env.FEATURE_FLAGS, '--')) }}
         name: Create the sample project with feature flags
         working-directory: ../
-        run: node ./create-vue-bwcj/outfile.cjs sample-project ${{ env.FEATURE_FLAGS }}
+        run: node ./create-bwcj-vue/outfile.cjs sample-project ${{ env.FEATURE_FLAGS }}
 
       - if: ${{ !(contains(env.FEATURE_FLAGS, '--')) }}
         name: Create the sample project with default options
         working-directory: ../
-        run: node ./create-vue-bwcj/outfile.cjs sample-project --default
+        run: node ./create-bwcj-vue/outfile.cjs sample-project --default
 
       - name: Install dependencies in the sample project
         working-directory: ../sample-project

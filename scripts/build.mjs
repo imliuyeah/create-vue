@@ -56,13 +56,13 @@ await esbuild.build({
           file: 'LICENSE',
           template(allDependencies) {
             // There's a bug in the plugin that it also includes the `create-vue` package itself
-            const dependencies = allDependencies.filter((d) => d.packageJson.name !== 'create-vue-bwcj')
+            const dependencies = allDependencies.filter((d) => d.packageJson.name !== 'create-bwcj-vue')
             const licenseText =
-              `# create-vue-bwcj core license\n\n` +
-              `create-vue-bwcj is released under the MIT license:\n\n` +
+              `# create-bwcj-vue core license\n\n` +
+              `create-bwcj-vue is released under the MIT license:\n\n` +
               CORE_LICENSE +
               `\n## Licenses of bundled dependencies\n\n` +
-              `The published create-vue-bwcj artifact additionally contains code with the following licenses:\n` +
+              `The published create-bwcj-vue artifact additionally contains code with the following licenses:\n` +
               [...new Set(dependencies.map((dependency) => dependency.packageJson.license))].join(
                 ', '
               ) +

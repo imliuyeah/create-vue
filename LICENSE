@@ -1,6 +1,6 @@
-# create-vue-bwcj core license
+# create-bwcj-vue core license
 
-create-vue-bwcj is released under the MIT license:
+create-bwcj-vue is released under the MIT license:
 
 MIT License
 
@@ -26,7 +26,7 @@ SOFTWARE.
 
 ## Licenses of bundled dependencies
 
-The published create-vue-bwcj artifact additionally contains code with the following licenses:
+The published create-bwcj-vue artifact additionally contains code with the following licenses:
 MIT, Apache-2.0
 
 ## Bundled dependencies
