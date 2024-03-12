@@ -199,14 +199,14 @@ async function init() {
           initial: () => toValidPackageName(targetDir),
           validate: (dir) => isValidPackageName(dir) || language.packageName.invalidMessage
         },
-        {
-          name: 'needsTypeScript',
-          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
-          message: language.needsTypeScript.message,
-          initial: true,
-          active: language.defaultToggleOptions.active,
-          inactive: language.defaultToggleOptions.inactive
-        },
+        // {
+        //   name: 'needsTypeScript',
+        //   type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+        //   message: language.needsTypeScript.message,
+        //   initial: true,
+        //   active: language.defaultToggleOptions.active,
+        //   inactive: language.defaultToggleOptions.inactive
+        // },
         {
           name: 'needsJsx',
           type: () => (isFeatureFlagsUsed ? null : 'toggle'),
@@ -319,21 +319,28 @@ async function init() {
     packageName = projectName ?? defaultProjectName,
     shouldOverwrite = argv.force,
     needsJsx = argv.jsx,
-    needsTypeScript = argv.typescript,
+    // needsTypeScript = argv.typescript,
+    needsTypeScript = true,
     needsRouter = true, // 默认安装 vue-router 不允许用户选择
     needsPinia = argv.pinia,
-    needsVitest = argv.vitest || argv.tests,
+    // needsVitest = argv.vitest || argv.tests,
+    needsVitest = false,
     needsEslint = argv.eslint || argv['eslint-with-prettier'],
     needsPrettier = argv['eslint-with-prettier'],
     needsUI = argv['element-plus'] || argv.elementPlus
   } = result
 
-  const { needsE2eTesting } = result
-  const needsCypress = argv.cypress || argv.tests || needsE2eTesting === 'cypress'
-  const needsCypressCT = needsCypress && !needsVitest
-  const needsNightwatch = argv.nightwatch || needsE2eTesting === 'nightwatch'
-  const needsNightwatchCT = needsNightwatch && !needsVitest
-  const needsPlaywright = argv.playwright || needsE2eTesting === 'playwright'
+  // const { needsE2eTesting } = result
+  // const needsCypress = argv.cypress || argv.tests || needsE2eTesting === 'cypress'
+  // const needsCypressCT = needsCypress && !needsVitest
+  // const needsNightwatch = argv.nightwatch || needsE2eTesting === 'nightwatch'
+  // const needsNightwatchCT = needsNightwatch && !needsVitest
+  // const needsPlaywright = argv.playwright || needsE2eTesting === 'playwright'
+  const needsCypress = false
+  const needsCypressCT = false
+  const needsNightwatch = false
+  const needsNightwatchCT = false
+  const needsPlaywright = false
 
   const root = path.join(cwd, targetDir)
 
@@ -498,8 +505,9 @@ async function init() {
   // 渲染 code 文件夹下的文件
   // 这里的 codeTemplate 是一个字符串，它的值是 'typescript-router' 或者 'default'
   const codeTemplate =
-    (needsTypeScript ? 'typescript-' : '') +
-    (needsRouter ? 'router' : 'default')
+    (needsTypeScript ? 'typescript' : '') +
+    (needsRouter ? '-router' : '-default') + 
+    (needsUI ? '-element' : '')
   render(`code/${codeTemplate}`)
 
   // Render entry file (main.js/ts).
