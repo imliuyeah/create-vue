@@ -76,16 +76,16 @@ withTestsFlags.push(['with-tests'])
 
 flagCombinations.push(...withTestsFlags)
 
-const playgroundDir = path.resolve(__dirname, '../playground/')
-cd(playgroundDir)
+// const playgroundDir = path.resolve(__dirname, '../playground/')
+// cd(playgroundDir)
 
-// remove all previous combinations
-for (const flags of flagCombinations) {
-  const projectName = flags.join('-')
+// // remove all previous combinations
+// for (const flags of flagCombinations) {
+//   const projectName = flags.join('-')
 
-  console.log(`Removing previously generated project ${projectName}`)
-  fs.rmSync(projectName, { recursive: true, force: true })
-}
+//   console.log(`Removing previously generated project ${projectName}`)
+//   fs.rmSync(projectName, { recursive: true, force: true })
+// }
 
 // Filter out combinations that are not allowed
 flagCombinations = flagCombinations.filter(
@@ -93,11 +93,11 @@ flagCombinations = flagCombinations.filter(
     !featureFlagsDenylist.some((denylist) => denylist.every((flag) => combination.includes(flag)))
 )
 
-const bin = path.posix.relative('../playground/', '../outfile.cjs')
+// const bin = path.posix.relative('../playground/', '../outfile.cjs')
 
-for (const flags of flagCombinations) {
-  const projectName = flags.join('-')
+// for (const flags of flagCombinations) {
+//   const projectName = flags.join('-')
 
-  console.log(`Creating project ${projectName}`)
-  await $`node ${[bin, projectName, ...flags.map((flag) => `--${flag}`), '--force']}`
-}
+//   console.log(`Creating project ${projectName}`)
+//   await $`node ${[bin, projectName, ...flags.map((flag) => `--${flag}`), '--force']}`
+// }
